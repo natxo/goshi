@@ -75,9 +75,9 @@ func openvpnshowpkcs11() {
 	var certs = make(map[int]Ykcert)
 	var ykcert Ykcert
 	var certregex = regexp.MustCompile(`^Certificate`)
-	var dnregex = regexp.MustCompile(`\s+DN:\s+`)
-	var serialregex = regexp.MustCompile(`\s+Serial:`)
-	var serialidregex = regexp.MustCompile(`\s+Serialized id:`)
+	var dnregex = regexp.MustCompile(`\s+DN:\s+(\S.+$)`)
+	var serialregex = regexp.MustCompile(`\s+Serial:\s+(\S+.+$)`)
+	var serialidregex = regexp.MustCompile(`\s+Serialized id:\s+\S.+token=(.+);(\S.+);(\S.+);id=%(\S.+)$`)
 	scanner := bufio.NewScanner(r)
 
 	go func() {
@@ -89,13 +89,19 @@ func openvpnshowpkcs11() {
 			case certregex.MatchString(scanner.Text()):
 				certnr++
 			case dnregex.MatchString(scanner.Text()):
-				ykcert.Modify(&ykcert, "DN", scanner.Text())
+				matched := dnregex.FindStringSubmatch(scanner.Text())
+				//ykcert.Modify(&ykcert, "DN", scanner.Text())
+				ykcert.Modify(&ykcert, "DN", matched[1])
 				certs[certnr] = ykcert
 			case serialregex.MatchString(scanner.Text()):
-				ykcert.Modify(&ykcert, "Serial", scanner.Text())
+				matched := serialregex.FindStringSubmatch(scanner.Text())
+				ykcert.Modify(&ykcert, "Serial", matched[1])
 				certs[certnr] = ykcert
 			case serialidregex.MatchString(scanner.Text()):
-				ykcert.Modify(&ykcert, "Serializedid", scanner.Text())
+				matched := serialidregex.FindStringSubmatch(scanner.Text())
+				ykcert.Modify(&ykcert, "Serializedid", matched[0])
+				ykcert.Modify(&ykcert, "Token", matched[1])
+				ykcert.Modify(&ykcert, "Id", matched[4])
 				certs[certnr] = ykcert
 			}
 		}
@@ -112,9 +118,13 @@ func openvpnshowpkcs11() {
 		return
 	}
 
+	fmt.Println(certs)
 	for _, v := range certs {
 		fmt.Println(v.DN)
 		fmt.Println(v.Serializedid)
+		fmt.Println(v.Token)
+		fmt.Println(v.Id)
+		fmt.Println(v.Serial)
 	}
 }
 
@@ -122,6 +132,8 @@ type Ykcert struct {
 	DN           string
 	Serial       string
 	Serializedid string
+	Token        string
+	Id           string
 }
 
 func (yk *Ykcert) Modify(obj any, field string, value any) {
