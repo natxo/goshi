@@ -1,0 +1,30 @@
+2025-03-31 10:26:46 PKCS#11: Adding PKCS#11 provider '/usr/lib64/opensc-pkcs11.so'
+
+The following objects are available for use.
+Each object shown below may be used as parameter to
+--pkcs11-id option please remember to use single quote mark.
+
+Certificate
+       DN:             O=SUB.DOM.TLD, CN=ruisname
+       Serial:         0556850923
+       Serialized id:  pkcs11:model=PKCS%2315%20emulated;token=1;manufacturer=piv_II;serial=d94166d54e957908;id=%08
+
+Certificate
+       DN:             O=ANOTHER.SUB.DOM.TLD, CN=host-ruisname.another.sub.dom.tld
+       Serial:         0FFF00DC
+       Serialized id:  pkcs11:model=PKCS%2315%20emulated;token=1;manufacturer=piv_II;serial=d94166d54e957908;id=%09
+
+Certificate
+       DN:             CN=1
+       Serial:         6E55F8A216EA5930C8C4FB04595C2F13C4818AD3
+       Serialized id:  pkcs11:model=PKCS%2315%20emulated;token=1;manufacturer=piv_II;serial=d94166d54e957908;id=%01
+
+Certificate
+       DN:             CN=kiekeboe
+       Serial:         EAC1453DD6D3816C
+       Serialized id:  pkcs11:model=PKCS%2315%20emulated;token=1;manufacturer=piv_II;serial=d94166d54e957908;id=%05
+
+Certificate
+       DN:             CN=kkiekeboe
+       Serial:         9E76DD9D29892A54
+       Serialized id:  pkcs11:model=PKCS%2315%20emulated;token=1;manufacturer=piv_II;serial=d94166d54e957908;id=%04
